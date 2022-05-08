@@ -6,6 +6,7 @@ import initialExternalLinkIndexes from './04_initialExternalLinkIndexes';
 import initialUserSessionIndexes from './05_initialUserSessionIndexes';
 import initialUserWebCredentialsIndexes from './06_initialUserWebCredentialsIndexes';
 import addSingleSessionMode from './07_addSingleSessionMode';
+import addLife from './08_addLife';
 
 export interface Migration {
     identifier: string;
@@ -21,6 +22,7 @@ const migrations: Migration[] = [
     initialUserSessionIndexes,
     initialUserWebCredentialsIndexes,
     addSingleSessionMode,
+    addLife,
 ];
 
 export default migrations;
