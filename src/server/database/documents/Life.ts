@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 
 export type Life = {
-    uniqueID: ObjectId;
+    _id: ObjectId;
     firstName: string;
     lastName: string;
     birthday: Date;
