@@ -70,6 +70,17 @@ export type AuthenticatorSetup = {
 
 export type ExternalLink = ResetPasswordLink;
 
+export type Life = {
+    __typename?: 'Life';
+    birthday: Scalars['DateTime'];
+    description: Scalars['String'];
+    firstName: Scalars['String'];
+    fullName: Scalars['String'];
+    hobbies: Array<Scalars['String']>;
+    lastName: Scalars['String'];
+    title?: Maybe<Scalars['String']>;
+};
+
 export type MessageNotice = {
     __typename?: 'MessageNotice';
     date: Scalars['DateTime'];
@@ -94,6 +105,8 @@ export type Mutation = {
     completeWebPublicKeyCredentialRegistration: Scalars['Boolean'];
     /** Create a new account/user */
     createAccount: User;
+    /** Create life */
+    createLife: Life;
     /** Enable 2FA / Authenticator for the signed user */
     enableAuthenticator: User;
     /** Generate a challenge to authenticate with web credentials */
@@ -162,6 +175,15 @@ export type MutationCreateAccountArgs = {
     username: Scalars['String'];
 };
 
+export type MutationCreateLifeArgs = {
+    birthday: Scalars['DateTime'];
+    description: Scalars['String'];
+    firstName: Scalars['String'];
+    hobbies: Array<Scalars['String']>;
+    lastName: Scalars['String'];
+    title?: InputMaybe<Scalars['String']>;
+};
+
 export type MutationEnableAuthenticatorArgs = {
     secret: Scalars['String'];
     token: Scalars['String'];
@@ -207,8 +229,12 @@ export type Query = {
     generateAuthenticatorChallenge?: Maybe<AuthenticationWithWebPublicKeyCredential>;
     /** Generate authenticator secret and qrcode */
     generateAuthenticatorSetup: AuthenticatorSetup;
+    /** Get life */
+    getLife: Life;
     /** Fetch WebAuthn security keys for a username */
     getWebauthnKeys: Array<Scalars['String']>;
+    /** List lives */
+    listLives: Array<Life>;
     /** List users */
     listUsers: PaginatedUsers;
     /** Retrieve a link information */
@@ -217,6 +243,10 @@ export type Query = {
 
 export type QueryGenerateAuthenticatorChallengeArgs = {
     username: Scalars['String'];
+};
+
+export type QueryGetLifeArgs = {
+    id?: InputMaybe<Scalars['ObjectID']>;
 };
 
 export type QueryGetWebauthnKeysArgs = {
@@ -345,6 +375,31 @@ export type RetrieveLinkQueryVariables = Exact<{
 export type RetrieveLinkQuery = {
     __typename?: 'Query';
     retrieveLink?: { __typename: 'ResetPasswordLink'; token: string } | null;
+};
+
+export type LifeDataFragment = {
+    __typename?: 'Life';
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    description: string;
+    birthday: string | Date;
+    hobbies: Array<string>;
+};
+
+export type GetLifeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetLifeQuery = {
+    __typename?: 'Query';
+    life: {
+        __typename?: 'Life';
+        firstName: string;
+        lastName: string;
+        fullName: string;
+        description: string;
+        birthday: string | Date;
+        hobbies: Array<string>;
+    };
 };
 
 type SystemMessageData_MessageNotice_Fragment = { __typename: 'MessageNotice'; date: string | Date; message: string };
@@ -670,6 +725,27 @@ export type CompleteWebPublicKeyCredentialRegistrationMutation = {
     completeWebPublicKeyCredentialRegistration: boolean;
 };
 
+export const LifeDataFragmentDoc = /* #__PURE__ */ {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'FragmentDefinition',
+            name: { kind: 'Name', value: 'LifeData' },
+            typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Life' } },
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'birthday' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'hobbies' } },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode;
 export const SystemMessageDataFragmentDoc = /* #__PURE__ */ {
     kind: 'Document',
     definitions: [
@@ -871,6 +947,75 @@ export function useRetrieveLinkLazyQuery(
 export type RetrieveLinkQueryHookResult = ReturnType<typeof useRetrieveLinkQuery>;
 export type RetrieveLinkLazyQueryHookResult = ReturnType<typeof useRetrieveLinkLazyQuery>;
 export type RetrieveLinkQueryResult = Apollo.QueryResult<RetrieveLinkQuery, RetrieveLinkQueryVariables>;
+export const GetLifeDocument = /* #__PURE__ */ {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'query',
+            name: { kind: 'Name', value: 'getLife' },
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        alias: { kind: 'Name', value: 'life' },
+                        name: { kind: 'Name', value: 'getLife' },
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [{ kind: 'FragmentSpread', name: { kind: 'Name', value: 'LifeData' } }],
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            kind: 'FragmentDefinition',
+            name: { kind: 'Name', value: 'LifeData' },
+            typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Life' } },
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'birthday' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'hobbies' } },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode;
+
+/**
+ * __useGetLifeQuery__
+ *
+ * To run a query within a React component, call `useGetLifeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLifeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLifeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetLifeQuery(baseOptions?: Apollo.QueryHookOptions<GetLifeQuery, GetLifeQueryVariables>) {
+    const options = { ...defaultOptions, ...baseOptions };
+
+    return Apollo.useQuery<GetLifeQuery, GetLifeQueryVariables>(GetLifeDocument, options);
+}
+export function useGetLifeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLifeQuery, GetLifeQueryVariables>) {
+    const options = { ...defaultOptions, ...baseOptions };
+
+    return Apollo.useLazyQuery<GetLifeQuery, GetLifeQueryVariables>(GetLifeDocument, options);
+}
+export type GetLifeQueryHookResult = ReturnType<typeof useGetLifeQuery>;
+export type GetLifeLazyQueryHookResult = ReturnType<typeof useGetLifeLazyQuery>;
+export type GetLifeQueryResult = Apollo.QueryResult<GetLifeQuery, GetLifeQueryVariables>;
 export const ListenOnSystemDocument = /* #__PURE__ */ {
     kind: 'Document',
     definitions: [

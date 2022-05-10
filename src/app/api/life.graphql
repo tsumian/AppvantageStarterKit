@@ -1,0 +1,14 @@
+fragment LifeData on Life {
+    firstName
+    lastName
+    fullName
+    description
+    birthday
+    hobbies
+}
+
+query getLife {
+    life: getLife {
+        ...LifeData
+    }
+}
