@@ -4,29 +4,21 @@ import { isDuplicateErrorOnFields } from '../../../utils';
 import { InvalidInput } from '../../errors';
 import { GraphQLMutationResolvers } from '../definitions';
 
-const mutation: GraphQLMutationResolvers['createLife'] = async ( 
-    root, 
-    { firstName, lastName, description, title, birthday, hobbies },
-    { getTranslations } 
-) => {
+const mutation: GraphQLMutationResolvers['createLife'] = async (root, { input }, { getTranslations }) => {
     const { collections } = await getDatabaseContext();
     const { t } = await getTranslations(['errors']);
-
-    const fullName = firstName + lastName;
-
     const document: Life = {
         _id: new ObjectId(),
-        firstName: firstName,
-        lastName: lastName,
-        fullName: fullName,
-        description: description,
-        birthday: birthday,
-        hobbies: hobbies,
-        title: title,
-    }
+        firstName: input.firstName,
+        lastName: input.lastName,
+        description: input.description,
+        birthday: input.birthday,
+        hobbies: input.hobbies,
+        title: input.title,
+    };
 
     try {
-        await collections.lives.insertOne(document)
+        await collections.lives.insertOne(document);
     } catch (error) {
         // check for duplicate full name
         if (isDuplicateErrorOnFields(error, 'fullName')) {
@@ -40,4 +32,3 @@ const mutation: GraphQLMutationResolvers['createLife'] = async (
 };
 
 export default mutation;
-

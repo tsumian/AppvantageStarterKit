@@ -1,4 +1,5 @@
 fragment LifeData on Life {
+    _id
     firstName
     lastName
     fullName
@@ -7,8 +8,17 @@ fragment LifeData on Life {
     hobbies
 }
 
-query getLife {
-    life: getLife {
+query getLife($id: ObjectID!) {
+    life: getLife(id: $id) {
         ...LifeData
+    }
+}
+
+query listLives {
+    list: listLives {
+        count
+        items {
+            ...LifeData
+        }
     }
 }

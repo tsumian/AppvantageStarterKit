@@ -1,5 +1,4 @@
 import { Collection } from 'mongodb';
-import { doc } from 'prettier';
 import * as documents from './documents';
 import { DatabaseContext } from './instance';
 

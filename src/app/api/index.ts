@@ -72,13 +72,47 @@ export type ExternalLink = ResetPasswordLink;
 
 export type Life = {
     __typename?: 'Life';
+    _id: Scalars['ObjectID'];
     birthday: Scalars['DateTime'];
     description: Scalars['String'];
     firstName: Scalars['String'];
     fullName: Scalars['String'];
     hobbies: Array<Scalars['String']>;
     lastName: Scalars['String'];
-    title?: Maybe<Scalars['String']>;
+    title: Scalars['String'];
+};
+
+export type LifeInput = {
+    birthday: Scalars['DateTime'];
+    description: Scalars['String'];
+    firstName: Scalars['String'];
+    hobbies: Array<Scalars['String']>;
+    lastName: Scalars['String'];
+    title: Scalars['String'];
+};
+
+export enum LifeSortingField {
+    /** Sort by birthday */
+    Birthday = 'birthday',
+    /** Sort by first name */
+    FirstName = 'firstName',
+    /** Sort by last name */
+    LastName = 'lastName',
+}
+
+export type LifeSortingRule = {
+    /** Field on which apply the sorting */
+    field: LifeSortingField;
+    /** Sorting order */
+    order: SortingOrder;
+};
+
+export type Lives = {
+    __typename?: 'Lives';
+    /** Number of lives matching the original query */
+    count: Scalars['Int'];
+    /** Lives on the request page */
+    items: Array<Life>;
 };
 
 export type MessageNotice = {
@@ -176,12 +210,7 @@ export type MutationCreateAccountArgs = {
 };
 
 export type MutationCreateLifeArgs = {
-    birthday: Scalars['DateTime'];
-    description: Scalars['String'];
-    firstName: Scalars['String'];
-    hobbies: Array<Scalars['String']>;
-    lastName: Scalars['String'];
-    title?: InputMaybe<Scalars['String']>;
+    input?: InputMaybe<LifeInput>;
 };
 
 export type MutationEnableAuthenticatorArgs = {
@@ -230,11 +259,11 @@ export type Query = {
     /** Generate authenticator secret and qrcode */
     generateAuthenticatorSetup: AuthenticatorSetup;
     /** Get life */
-    getLife: Life;
+    getLife?: Maybe<Life>;
     /** Fetch WebAuthn security keys for a username */
     getWebauthnKeys: Array<Scalars['String']>;
     /** List lives */
-    listLives: Array<Life>;
+    listLives: Lives;
     /** List users */
     listUsers: PaginatedUsers;
     /** Retrieve a link information */
@@ -379,6 +408,7 @@ export type RetrieveLinkQuery = {
 
 export type LifeDataFragment = {
     __typename?: 'Life';
+    _id: string;
     firstName: string;
     lastName: string;
     fullName: string;
@@ -387,18 +417,41 @@ export type LifeDataFragment = {
     hobbies: Array<string>;
 };
 
-export type GetLifeQueryVariables = Exact<{ [key: string]: never }>;
+export type GetLifeQueryVariables = Exact<{
+    id: Scalars['ObjectID'];
+}>;
 
 export type GetLifeQuery = {
     __typename?: 'Query';
-    life: {
+    life?: {
         __typename?: 'Life';
+        _id: string;
         firstName: string;
         lastName: string;
         fullName: string;
         description: string;
         birthday: string | Date;
         hobbies: Array<string>;
+    } | null;
+};
+
+export type ListLivesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ListLivesQuery = {
+    __typename?: 'Query';
+    list: {
+        __typename?: 'Lives';
+        count: number;
+        items: Array<{
+            __typename?: 'Life';
+            _id: string;
+            firstName: string;
+            lastName: string;
+            fullName: string;
+            description: string;
+            birthday: string | Date;
+            hobbies: Array<string>;
+        }>;
     };
 };
 
@@ -735,6 +788,7 @@ export const LifeDataFragmentDoc = /* #__PURE__ */ {
             selectionSet: {
                 kind: 'SelectionSet',
                 selections: [
+                    { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
@@ -954,6 +1008,16 @@ export const GetLifeDocument = /* #__PURE__ */ {
             kind: 'OperationDefinition',
             operation: 'query',
             name: { kind: 'Name', value: 'getLife' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                    type: {
+                        kind: 'NonNullType',
+                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'ObjectID' } },
+                    },
+                },
+            ],
             selectionSet: {
                 kind: 'SelectionSet',
                 selections: [
@@ -961,6 +1025,13 @@ export const GetLifeDocument = /* #__PURE__ */ {
                         kind: 'Field',
                         alias: { kind: 'Name', value: 'life' },
                         name: { kind: 'Name', value: 'getLife' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'id' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                            },
+                        ],
                         selectionSet: {
                             kind: 'SelectionSet',
                             selections: [{ kind: 'FragmentSpread', name: { kind: 'Name', value: 'LifeData' } }],
@@ -976,6 +1047,7 @@ export const GetLifeDocument = /* #__PURE__ */ {
             selectionSet: {
                 kind: 'SelectionSet',
                 selections: [
+                    { kind: 'Field', name: { kind: 'Name', value: '_id' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
@@ -1000,10 +1072,11 @@ export const GetLifeDocument = /* #__PURE__ */ {
  * @example
  * const { data, loading, error } = useGetLifeQuery({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetLifeQuery(baseOptions?: Apollo.QueryHookOptions<GetLifeQuery, GetLifeQueryVariables>) {
+export function useGetLifeQuery(baseOptions: Apollo.QueryHookOptions<GetLifeQuery, GetLifeQueryVariables>) {
     const options = { ...defaultOptions, ...baseOptions };
 
     return Apollo.useQuery<GetLifeQuery, GetLifeQueryVariables>(GetLifeDocument, options);
@@ -1016,6 +1089,90 @@ export function useGetLifeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetLifeQueryHookResult = ReturnType<typeof useGetLifeQuery>;
 export type GetLifeLazyQueryHookResult = ReturnType<typeof useGetLifeLazyQuery>;
 export type GetLifeQueryResult = Apollo.QueryResult<GetLifeQuery, GetLifeQueryVariables>;
+export const ListLivesDocument = /* #__PURE__ */ {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'query',
+            name: { kind: 'Name', value: 'listLives' },
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        alias: { kind: 'Name', value: 'list' },
+                        name: { kind: 'Name', value: 'listLives' },
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [
+                                { kind: 'Field', name: { kind: 'Name', value: 'count' } },
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'items' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [
+                                            { kind: 'FragmentSpread', name: { kind: 'Name', value: 'LifeData' } },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            kind: 'FragmentDefinition',
+            name: { kind: 'Name', value: 'LifeData' },
+            typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Life' } },
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'birthday' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'hobbies' } },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode;
+
+/**
+ * __useListLivesQuery__
+ *
+ * To run a query within a React component, call `useListLivesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListLivesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListLivesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListLivesQuery(baseOptions?: Apollo.QueryHookOptions<ListLivesQuery, ListLivesQueryVariables>) {
+    const options = { ...defaultOptions, ...baseOptions };
+
+    return Apollo.useQuery<ListLivesQuery, ListLivesQueryVariables>(ListLivesDocument, options);
+}
+export function useListLivesLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<ListLivesQuery, ListLivesQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+
+    return Apollo.useLazyQuery<ListLivesQuery, ListLivesQueryVariables>(ListLivesDocument, options);
+}
+export type ListLivesQueryHookResult = ReturnType<typeof useListLivesQuery>;
+export type ListLivesLazyQueryHookResult = ReturnType<typeof useListLivesLazyQuery>;
+export type ListLivesQueryResult = Apollo.QueryResult<ListLivesQuery, ListLivesQueryVariables>;
 export const ListenOnSystemDocument = /* #__PURE__ */ {
     kind: 'Document',
     definitions: [

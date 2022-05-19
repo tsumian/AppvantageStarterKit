@@ -72,13 +72,60 @@ union ExternalLink = ResetPasswordLink
 scalar JSONObject
 
 type Life {
+    _id: ObjectID!
     birthday: DateTime!
     description: String!
     firstName: String!
     fullName: String!
     hobbies: [String!]!
     lastName: String!
-    title: String
+    title: String!
+}
+
+input LifeInput {
+    birthday: DateTime!
+    description: String!
+    firstName: String!
+    hobbies: [String!]!
+    lastName: String!
+    title: String!
+}
+
+enum LifeSortingField {
+    """
+    Sort by birthday
+    """
+    birthday
+    """
+    Sort by first name
+    """
+    firstName
+    """
+    Sort by last name
+    """
+    lastName
+}
+
+input LifeSortingRule {
+    """
+    Field on which apply the sorting
+    """
+    field: LifeSortingField!
+    """
+    Sorting order
+    """
+    order: SortingOrder!
+}
+
+type Lives {
+    """
+    Number of lives matching the original query
+    """
+    count: Int!
+    """
+    Lives on the request page
+    """
+    items: [Life!]!
 }
 
 type MessageNotice {
@@ -122,14 +169,7 @@ type Mutation {
     """
     Create life
     """
-    createLife(
-        birthday: DateTime!
-        description: String!
-        firstName: String!
-        hobbies: [String!]!
-        lastName: String!
-        title: String
-    ): Life!
+    createLife(input: LifeInput): Life!
     """
     Enable 2FA / Authenticator for the signed user
     """
@@ -206,7 +246,7 @@ type Query {
     """
     Get life
     """
-    getLife(id: ObjectID): Life!
+    getLife(id: ObjectID): Life
     """
     Fetch WebAuthn security keys for a username
     """
@@ -214,7 +254,7 @@ type Query {
     """
     List lives
     """
-    listLives: [Life!]!
+    listLives: Lives!
     """
     List users
     """
