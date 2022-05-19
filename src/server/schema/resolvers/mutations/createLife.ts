@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 import { getDatabaseContext, Life } from '../../../database';
 import { isDuplicateErrorOnFields } from '../../../utils';
 import { InvalidInput } from '../../errors';
-import { GraphQLMutationResolvers } from '../definitions';
+import { GraphQLLifeResolvers, GraphQLMutationResolvers } from '../definitions';
 
 const mutation: GraphQLMutationResolvers['createLife'] = async (root, { input }, { getTranslations }) => {
     const { collections } = await getDatabaseContext();
@@ -11,6 +11,7 @@ const mutation: GraphQLMutationResolvers['createLife'] = async (root, { input },
         _id: new ObjectId(),
         firstName: input.firstName,
         lastName: input.lastName,
+        // fullName: input.firstName + input.lastName,
         description: input.description,
         birthday: input.birthday,
         hobbies: input.hobbies,

@@ -72,12 +72,12 @@ export type ExternalLink = ResetPasswordLink;
 
 export type Life = {
     __typename?: 'Life';
-    _id: Scalars['ObjectID'];
     birthday: Scalars['DateTime'];
     description: Scalars['String'];
     firstName: Scalars['String'];
     fullName: Scalars['String'];
     hobbies: Array<Scalars['String']>;
+    id: Scalars['ObjectID'];
     lastName: Scalars['String'];
     title: Scalars['String'];
 };
@@ -408,7 +408,7 @@ export type RetrieveLinkQuery = {
 
 export type LifeDataFragment = {
     __typename?: 'Life';
-    _id: string;
+    id: string;
     firstName: string;
     lastName: string;
     fullName: string;
@@ -425,7 +425,7 @@ export type GetLifeQuery = {
     __typename?: 'Query';
     life?: {
         __typename?: 'Life';
-        _id: string;
+        id: string;
         firstName: string;
         lastName: string;
         fullName: string;
@@ -444,7 +444,7 @@ export type ListLivesQuery = {
         count: number;
         items: Array<{
             __typename?: 'Life';
-            _id: string;
+            id: string;
             firstName: string;
             lastName: string;
             fullName: string;
@@ -788,7 +788,7 @@ export const LifeDataFragmentDoc = /* #__PURE__ */ {
             selectionSet: {
                 kind: 'SelectionSet',
                 selections: [
-                    { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
@@ -1047,7 +1047,7 @@ export const GetLifeDocument = /* #__PURE__ */ {
             selectionSet: {
                 kind: 'SelectionSet',
                 selections: [
-                    { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
@@ -1130,7 +1130,7 @@ export const ListLivesDocument = /* #__PURE__ */ {
             selectionSet: {
                 kind: 'SelectionSet',
                 selections: [
-                    { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                    { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'firstName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'lastName' } },
                     { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },

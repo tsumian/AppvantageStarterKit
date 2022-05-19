@@ -1,5 +1,5 @@
 type Life {
-    _id: ObjectID!
+    id: ObjectID!
     firstName: String!
     lastName: String!
     fullName: String!

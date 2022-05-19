@@ -1,5 +1,5 @@
 fragment LifeData on Life {
-    _id
+    id
     firstName
     lastName
     fullName

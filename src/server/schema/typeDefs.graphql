@@ -72,12 +72,12 @@ union ExternalLink = ResetPasswordLink
 scalar JSONObject
 
 type Life {
-    _id: ObjectID!
     birthday: DateTime!
     description: String!
     firstName: String!
     fullName: String!
     hobbies: [String!]!
+    id: ObjectID!
     lastName: String!
     title: String!
 }

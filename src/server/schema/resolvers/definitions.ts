@@ -73,12 +73,12 @@ export type GraphQLAuthenticatorSetup = {
 export type GraphQLExternalLink = GraphQLResetPasswordLink;
 
 export type GraphQLLife = {
-    _id: Scalars['ObjectID'];
     birthday: Scalars['DateTime'];
     description: Scalars['String'];
     firstName: Scalars['String'];
     fullName: Scalars['String'];
     hobbies: Array<Scalars['String']>;
+    id: Scalars['ObjectID'];
     lastName: Scalars['String'];
     title: Scalars['String'];
 };
@@ -603,12 +603,12 @@ export type GraphQLLifeResolvers<
     ContextType = Context,
     ParentType extends GraphQLResolversParentTypes['Life'] = GraphQLResolversParentTypes['Life']
 > = {
-    _id?: Resolver<GraphQLResolversTypes['ObjectID'], ParentType, ContextType>;
     birthday?: Resolver<GraphQLResolversTypes['DateTime'], ParentType, ContextType>;
     description?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
     firstName?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
     fullName?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
     hobbies?: Resolver<Array<GraphQLResolversTypes['String']>, ParentType, ContextType>;
+    id?: Resolver<GraphQLResolversTypes['ObjectID'], ParentType, ContextType>;
     lastName?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
     title?: Resolver<GraphQLResolversTypes['String'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
