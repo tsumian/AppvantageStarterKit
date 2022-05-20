@@ -275,7 +275,7 @@ export type QueryGenerateAuthenticatorChallengeArgs = {
 };
 
 export type QueryGetLifeArgs = {
-    id?: InputMaybe<Scalars['ObjectID']>;
+    id: Scalars['ObjectID'];
 };
 
 export type QueryGetWebauthnKeysArgs = {

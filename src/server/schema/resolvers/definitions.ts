@@ -264,7 +264,7 @@ export type GraphQLQueryGenerateAuthenticatorChallengeArgs = {
 };
 
 export type GraphQLQueryGetLifeArgs = {
-    id?: InputMaybe<Scalars['ObjectID']>;
+    id: Scalars['ObjectID'];
 };
 
 export type GraphQLQueryGetWebauthnKeysArgs = {
@@ -758,7 +758,12 @@ export type GraphQLQueryResolvers<
         RequireFields<GraphQLQueryGenerateAuthenticatorChallengeArgs, 'username'>
     >;
     generateAuthenticatorSetup?: Resolver<GraphQLResolversTypes['AuthenticatorSetup'], ParentType, ContextType>;
-    getLife?: Resolver<Maybe<GraphQLResolversTypes['Life']>, ParentType, ContextType, Partial<GraphQLQueryGetLifeArgs>>;
+    getLife?: Resolver<
+        Maybe<GraphQLResolversTypes['Life']>,
+        ParentType,
+        ContextType,
+        RequireFields<GraphQLQueryGetLifeArgs, 'id'>
+    >;
     getWebauthnKeys?: Resolver<
         Array<GraphQLResolversTypes['String']>,
         ParentType,
