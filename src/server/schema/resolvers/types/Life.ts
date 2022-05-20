@@ -1,7 +1,7 @@
 import { GraphQLLifeResolvers } from '../definitions';
 
 const LifeGraphQL: GraphQLLifeResolvers = {
-     id: root => root._id,
+    id: root => root._id,
     fullName: root => {
         const fullName = `${root.firstName} ${root.lastName}`;
 
