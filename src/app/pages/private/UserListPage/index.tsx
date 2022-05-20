@@ -8,7 +8,7 @@ import UserList from './UserList';
 const UserListPage = () => {
     const { t } = useTranslation('userList');
 
-    const goToNewUserPage = useGoTo('/console/system/users/new');
+    const goToNewUserPage = useGoTo('/private/system/users/new');
 
     const extra = (
         <Button icon={<PlusOutlined />} onClick={goToNewUserPage} type="primary">

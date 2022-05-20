@@ -1,0 +1,24 @@
+fragment LifeData on Life {
+    id
+    firstName
+    lastName
+    fullName
+    description
+    birthday
+    hobbies
+}
+
+query getLife($id: ObjectID!) {
+    life: getLife(id: $id) {
+        ...LifeData
+    }
+}
+
+query listLives {
+    list: listLives {
+        count
+        items {
+            ...LifeData
+        }
+    }
+}

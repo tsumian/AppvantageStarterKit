@@ -1,0 +1,60 @@
+type Life {
+    id: ObjectID!
+    firstName: String!
+    lastName: String!
+    fullName: String!
+    description: String!
+    title: String!
+    birthday: DateTime!
+    hobbies: [String!]!
+}
+
+type Lives {
+    """
+    Number of lives matching the original query
+    """
+    count: Int!
+
+    """
+    Lives on the request page
+    """
+    items: [Life!]!
+}
+
+input LifeInput {
+    firstName: String!
+    lastName: String!
+    description: String!
+    title: String!
+    birthday: DateTime!
+    hobbies: [String!]!
+}
+
+enum LifeSortingField {
+    """
+    Sort by first name
+    """
+    firstName
+
+    """
+    Sort by last name
+    """
+    lastName
+
+    """
+    Sort by birthday
+    """
+    birthday
+}
+
+input LifeSortingRule {
+    """
+    Field on which apply the sorting
+    """
+    field: LifeSortingField!
+
+    """
+    Sorting order
+    """
+    order: SortingOrder!
+}
